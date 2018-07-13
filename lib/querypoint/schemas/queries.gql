@@ -1,0 +1,84 @@
+# users in the system
+type User {
+  id: String
+  email: String
+  organizations: [Organization]
+}
+
+# Session type represents session for a logged in user
+type Session {
+  id: String
+}
+
+# organizations
+type Organization {
+  id: String
+  user_id: Int
+  name: String
+  devices: [Device]
+	cashiers: [Cashier]
+	products: [Product]
+	orders: [Order]
+}
+
+# devices the organization is using to run transactions
+type Device {
+  id: String
+  organization_id: Int
+  serial: String 
+  name: String
+}
+
+# cashier is someone operating a payment device
+type Cashier {
+  id: String
+  organization_id: Int
+  name: String
+  phone: String
+  password: String
+  roles: String
+}
+
+# product is something the organization is selling
+type Product {
+  id: String
+  organization_id: Int
+  sku: Int
+  description: String
+  category: String
+  price: Int
+}
+
+# productsOrder describes a product and the amount of it that a customer is buying
+type ProductOrder {
+  id: String
+  product_id: String
+  units: Int
+  amount_per_unit: Float
+  amount_total: Float
+}
+
+# an Order is a collection of product orders
+type Order {
+  id: String
+  organization_id: Int
+  products:[ProductOrder]
+  amount: Float
+  timestamp: String
+  payed: Boolean
+  cancelled: Boolean
+}
+
+# money exchange
+type Payment {
+  id: String
+  orderId: Int
+  amount: Float
+  timestamp: String
+}
+
+type Query {
+  users:[User],
+  viewer(id: String): User
+  organization(id: String): Organization
+}

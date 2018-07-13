@@ -1,0 +1,92 @@
+enum PaymentMode {
+  CASH
+  MPESA
+  CARD
+}
+
+# users in the system
+type User {
+  id: Int
+  email: String
+  password: String
+}
+
+# Session type represents session for a logged in user
+type Session {
+  id: String
+}
+
+# organizations
+type Organization {
+  id: Int
+  user_id: Int
+  name: String
+}
+
+# devices the organization is using to run transactions
+type Device {
+  id: Int
+  organization_id: Int
+  serial: String 
+  name: String
+}
+
+# cashier is someone operating a payment device
+type Cashier {
+  id: Int
+  organization_id: Int
+  name: String
+  phone: String
+  roles: [String]
+}
+
+# product is something the organization is selling
+type Product {
+  id: Int
+  organization_id: Int
+  sku: Int
+  description: String
+  location: String
+  price: Int
+  vat: Float
+}
+
+# productsOrder describes a product and the amount of it that a customer is buying
+type ProductOrder {
+  product_id: Int
+  units: Int
+  amount_per_unit: Float
+  amount_total: Float
+}
+
+# an Order is a collection of product orders
+type Order {
+  id: String
+  device_serial: String
+  cashier_id: String
+  organization_id: String
+  products:[ProductOrder]
+  amount: Float
+  timestamp: Timestamp
+}
+
+# money exchange
+type Payment {
+  id: Int
+  order_id: String
+  mode: PaymentMode
+  amount: Float
+  timestamp: Timestamp
+}
+
+type Mutation {
+  createUser(user: User): User
+  loginUser(user: User): Session
+  organizationCreate(product: Product): Organization
+  productCreate(product: Product): Product
+  deviceCreate(device: Device): Device
+  cashierCreate(cashier: Cashier): Cashier
+  orderCreate(order: Order): Order
+  orderCancel(order_id: String): Boolean
+  paymentCreate(payment: Payment): Payment
+}
